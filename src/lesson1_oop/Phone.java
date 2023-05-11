@@ -40,5 +40,12 @@ public class Phone {
         this.gia = gia;
     }
     
-    
+    public void xuatThongTin()
+    {
+        System.out.println(
+            this.getNsx() + " - " + 
+            this.getImei() + " - " + 
+            this.getGia()
+        );
+    }
 }

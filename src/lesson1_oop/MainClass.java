@@ -10,11 +10,18 @@ public class MainClass {
         galaxy.setNsx("Samsung");
         galaxy.setImei("Ss01");
         galaxy.setGia(150000000);
-        
-        System.out.println(
-            galaxy.getNsx() + " - " +
-            galaxy.getImei()+ " - " +
-            galaxy.getGia()
-        );
+//        
+//        System.out.println(
+//            galaxy.getNsx() + " - " +
+//            galaxy.getImei()+ " - " +
+//            galaxy.getGia()
+//        );
+
+        Samsung p = new Samsung();
+        p.setNsx("Oppo");
+        p.setImei("PH4");
+        p.setGia(7000);
+        p.xuatThongTin();
+        p.xuatThongTin("Note");
     }
 }
