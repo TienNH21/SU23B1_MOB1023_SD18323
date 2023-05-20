@@ -218,6 +218,11 @@ public class QLSVFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblSV.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSVMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblSV);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -273,16 +278,7 @@ public class QLSVFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        String ma = this.txtMaSV.getText();
-        String hoTen = this.txtHoTen.getText();
-        String email = this.txtEmail.getText();
-        String pwd = String.valueOf(this.txtPwd.getPassword());
-        int gioiTinh = this.rdoNam.isSelected() ? 1 : 0;
-        String cNganh = this.cbbCNganh.getSelectedItem().toString();
-        String trangThai = this.ckbStatus.isSelected() == true
-                ? "Đang học" : "Bảo lưu";
-        
-        SinhVien sv = new SinhVien(ma, hoTen, email, pwd, gioiTinh, cNganh, trangThai);
+        SinhVien sv = this.getForm();
         dssv.add(sv);
         loadTable();
     }//GEN-LAST:event_btnThemActionPerformed
@@ -324,12 +320,8 @@ public class QLSVFrame extends javax.swing.JFrame {
         this.loadTable();
     }//GEN-LAST:event_btnXoaActionPerformed
 
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        int row = this.tblSV.getSelectedRow();
-        if (row == -1) {
-            return ;
-        }
-        
+    private SinhVien getForm()
+    {
         String ma = this.txtMaSV.getText();
         String hoTen = this.txtHoTen.getText();
         String email = this.txtEmail.getText();
@@ -340,9 +332,42 @@ public class QLSVFrame extends javax.swing.JFrame {
                 ? "Đang học" : "Bảo lưu";
         
         SinhVien sv = new SinhVien(ma, hoTen, email, pwd, gioiTinh, cNganh, trangThai);
+        return sv;
+    }
+    
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        int row = this.tblSV.getSelectedRow();
+        if (row == -1) {
+            return ;
+        }
+        
+        SinhVien sv = this.getForm();
         dssv.set(row, sv);
         this.loadTable();
     }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void tblSVMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSVMouseClicked
+        int row = this.tblSV.getSelectedRow();
+        if (row == -1) {
+            return ;
+        }
+        
+        SinhVien sv = this.dssv.get(row);
+        this.txtMaSV.setText( sv.getMa() );
+        this.txtHoTen.setText( sv.getHoTen());
+        this.txtEmail.setText( sv.getEmail());
+        this.txtPwd.setText( sv.getPwd());
+        
+        if (sv.getGioiTinh() == 1) {
+            this.rdoNam.setSelected(true);
+        } else {
+            this.rdoNu.setSelected(true);
+        }
+        
+        boolean stt = sv.getTrangThai().equals("Đang học") ? true : false;
+        this.ckbStatus.setSelected(stt);
+        this.cbbCNganh.setSelectedItem(sv.getcNganh());
+    }//GEN-LAST:event_tblSVMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
