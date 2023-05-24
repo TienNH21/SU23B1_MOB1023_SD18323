@@ -2,8 +2,8 @@ package lesson2_interface;
 
 public class MainClass {
     public static void main(String[] args) {
-        IPhone ip = new IPhone();
-        Samsung ss = new Samsung();
+        SmartPhone ip = new IPhone();
+        SmartPhone ss = new Samsung();
         suDungDT(ip);
         suDungDT(ss);
     }
