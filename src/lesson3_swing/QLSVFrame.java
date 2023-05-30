@@ -1,6 +1,7 @@
 package lesson3_swing;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class QLSVFrame extends javax.swing.JFrame {
@@ -279,6 +280,9 @@ public class QLSVFrame extends javax.swing.JFrame {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         SinhVien sv = this.getForm();
+        if (sv == null) {
+            return ;
+        }
         dssv.add(sv);
         loadTable();
     }//GEN-LAST:event_btnThemActionPerformed
@@ -298,6 +302,7 @@ public class QLSVFrame extends javax.swing.JFrame {
             dtm.addRow(object);
         } // Kết thúc for
 
+        JOptionPane.showMessageDialog(this, "Load dữ liệu thành công");
     }
 
     private void btnXoaFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaFormActionPerformed
@@ -318,18 +323,29 @@ public class QLSVFrame extends javax.swing.JFrame {
         
         this.dssv.remove(row);
         this.loadTable();
+        JOptionPane.showMessageDialog(this, "Xóa thành công");
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private SinhVien getForm()
     {
-        String ma = this.txtMaSV.getText();
-        String hoTen = this.txtHoTen.getText();
-        String email = this.txtEmail.getText();
-        String pwd = String.valueOf(this.txtPwd.getPassword());
+        String ma = this.txtMaSV.getText().trim();
+        String hoTen = this.txtHoTen.getText().trim();
+        String email = this.txtEmail.getText().trim();
+        String pwd = String.valueOf(this.txtPwd.getPassword()).trim();
         int gioiTinh = this.rdoNam.isSelected() ? 1 : 0;
         String cNganh = this.cbbCNganh.getSelectedItem().toString();
         String trangThai = this.ckbStatus.isSelected() == true
                 ? "Đang học" : "Bảo lưu";
+        
+        if (
+            ma.length() == 0 ||
+            hoTen.length() == 0 ||
+            pwd.length() == 0 ||
+            email.length() == 0
+        ) {
+            JOptionPane.showMessageDialog(this, "Ko được để trống");
+            return null;
+        }
         
         SinhVien sv = new SinhVien(ma, hoTen, email, pwd, gioiTinh, cNganh, trangThai);
         return sv;
@@ -342,6 +358,10 @@ public class QLSVFrame extends javax.swing.JFrame {
         }
         
         SinhVien sv = this.getForm();
+        if (sv == null) {
+            return ;
+        }
+        
         dssv.set(row, sv);
         this.loadTable();
     }//GEN-LAST:event_btnSuaActionPerformed
