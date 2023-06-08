@@ -14,16 +14,15 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class QLSVFrame extends javax.swing.JFrame {
-
-    private ArrayList<SinhVien> dssv = new ArrayList<>();
     private String filename = "list_sv.dat";
+    private SinhVienService svService = new SinhVienService();
 
     public QLSVFrame() {
         initComponents();
 
-        dssv.add(new SinhVien("PH1", "Ng Van A", "anv@fpt.edu.vn", "123", 1, "UDPM", "Đang học"));
-        dssv.add(new SinhVien("PH2", "Ng Thi B", "bnv@fpt.edu.vn", "123", 0, "TKTW", "Đang học"));
-        dssv.add(new SinhVien("PH3", "Ng Van C", "cnv@fpt.edu.vn", "123", 1, "LTMT", "Đang học"));
+        this.svService.insert(new SinhVien("PH1", "Ng Van A", "anv@fpt.edu.vn", "123", 1, "UDPM", "Đang học"));
+        this.svService.insert(new SinhVien("PH2", "Ng Thi B", "bnv@fpt.edu.vn", "123", 0, "TKTW", "Đang học"));
+        this.svService.insert(new SinhVien("PH3", "Ng Van C", "cnv@fpt.edu.vn", "123", 1, "LTMT", "Đang học"));
 
         this.loadTable();
     }
@@ -317,14 +316,14 @@ public class QLSVFrame extends javax.swing.JFrame {
         if (sv == null) {
             return ;
         }
-        dssv.add(sv);
+        this.svService.insert(sv);
         loadTable();
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void loadTable() {
         DefaultTableModel dtm = (DefaultTableModel) this.tblSV.getModel();
         dtm.setRowCount(0); // Xóa các dòng đang có trên JTable
-        for (SinhVien sv : dssv) {
+        for (SinhVien sv : this.svService.getListSV()) {
             Object[] object = {
                 sv.getMa(),
                 sv.getHoTen(),
@@ -355,7 +354,7 @@ public class QLSVFrame extends javax.swing.JFrame {
             return ;
         }
         
-        this.dssv.remove(row);
+        this.svService.delete(row);
         this.loadTable();
         JOptionPane.showMessageDialog(this, "Xóa thành công");
     }//GEN-LAST:event_btnXoaActionPerformed
@@ -396,7 +395,7 @@ public class QLSVFrame extends javax.swing.JFrame {
             return ;
         }
         
-        dssv.set(row, sv);
+        this.svService.update(row, sv);
         this.loadTable();
     }//GEN-LAST:event_btnSuaActionPerformed
 
@@ -406,7 +405,7 @@ public class QLSVFrame extends javax.swing.JFrame {
             return ;
         }
         
-        SinhVien sv = this.dssv.get(row);
+        SinhVien sv = this.svService.getListSV().get(row);
         this.txtMaSV.setText( sv.getMa() );
         this.txtHoTen.setText( sv.getHoTen());
         this.txtEmail.setText( sv.getEmail());
@@ -434,7 +433,7 @@ public class QLSVFrame extends javax.swing.JFrame {
             // Mở stream để ghi file
             FileOutputStream fos = new FileOutputStream(f);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(dssv);
+            oos.writeObject(this.svService.getListSV());
 
             // Đón stream
             oos.close();
@@ -460,7 +459,7 @@ public class QLSVFrame extends javax.swing.JFrame {
             FileInputStream fis = new FileInputStream(f);
             ObjectInputStream ois = new ObjectInputStream(fis);
             ArrayList<SinhVien> ds = (ArrayList<SinhVien>) ois.readObject();
-            this.dssv = ds;
+            this.svService.setListSV(ds);
             ois.close();
             
             JOptionPane.showMessageDialog(this, "Đọc file thành công");
